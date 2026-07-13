@@ -1,6 +1,6 @@
 from app.config.settings import APP_NAME, VERSION
 from app.core.logger import logger
-from app.memory.memory_manager import MemoryManager
+from app.kernel.kernel import VishAIKernel
 
 
 def boot():
@@ -8,7 +8,7 @@ def boot():
     logger.info(f"Booting {APP_NAME}")
     logger.info(f"Version : {VERSION}")
 
-    memory = MemoryManager()
+    kernel = VishAIKernel()
 
-    logger.info("Boot Complete")
+    logger.info("System Ready")
     logger.info("=" * 40)
