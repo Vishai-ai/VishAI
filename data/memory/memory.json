@@ -1,5 +1,12 @@
 {
+    "user": {
+        "name": "Vishal"
+    },
     "facts": {
-        "favorite_car": "BMW"
-    }
+        "favorite_car": "bmw",
+        "favorite_language": "Python"
+    },
+    "notes": [
+        "Build VishAI Startup"
+    ]
 }

@@ -7,13 +7,14 @@ class IntentDetector:
     def detect(self, text: str) -> str:
         text = text.lower()
 
-        if "remember" in text:
+        if text.startswith("remember"):
             return "memory_save"
 
-        elif "what" in text:
+        elif text.startswith("what"):
             return "memory_recall"
 
-        elif "task" in text:
+        elif text.startswith("create task"):
             return "task"
 
+        logger.info(f"Unknown intent: {text}")
         return "unknown"
