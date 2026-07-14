@@ -2,15 +2,22 @@ class CommandParser:
     """Extracts key-value data from commands."""
 
     def parse_memory(self, text: str):
+        """Parse generic 'Remember my ... is ...' commands."""
 
-        text = text.lower()
+        original_text = text.strip()
+        lower_text = original_text.lower()
 
-        if "favorite car is" in text:
-            value = text.split("favorite car is")[1].strip()
-            return "favorite_car", value
+        if not lower_text.startswith("remember my "):
+            return None, None
 
-        if "favorite language is" in text:
-            value = text.split("favorite language is")[1].strip()
-            return "favorite_language", value
+        content = original_text[len("Remember my "):]
 
-        return None, None
+        if " is " not in content:
+            return None, None
+
+        key, value = content.split(" is ", 1)
+
+        key = key.strip().lower().replace(" ", "_")
+        value = value.strip()
+
+        return key, value
