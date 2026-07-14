@@ -1,10 +1,5 @@
 {
-    "user": {
-        "name": "Vishal"
-    },
-    "skills": [],
-    "notes": [
-        "Build VishAI Startup"
-    ],
-    "tasks": []
+    "facts": {
+        "favorite_car": "BMW"
+    }
 }

@@ -14,7 +14,9 @@ class VishAIKernel:
         self.memory = MemoryManager()
         self.knowledge = KnowledgeManager()
         self.tasks = TaskManager()
-        self.brain = BrainEngine()
+
+        # Brain now receives MemoryManager
+        self.brain = BrainEngine(self.memory)
 
         logger.info(f"Welcome {self.memory.get_user_name()}")
         logger.info("Kernel Ready")
