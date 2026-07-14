@@ -21,3 +21,19 @@ class CommandParser:
         value = value.strip()
 
         return key, value
+
+    def parse_recall(self, text: str):
+        """Parse generic 'What is my ...?' commands."""
+
+        original_text = text.strip()
+        lower_text = original_text.lower()
+
+        if not lower_text.startswith("what is my "):
+            return None
+
+        key = original_text[len("What is my "):]
+
+        key = key.replace("?", "").strip()
+        key = key.lower().replace(" ", "_")
+
+        return key

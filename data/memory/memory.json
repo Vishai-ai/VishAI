@@ -4,7 +4,9 @@
     },
     "facts": {
         "favorite_car": "bmw",
-        "favorite_language": "Python"
+        "favorite_language": "Python",
+        "city": "Lucknow",
+        "hobby": "Coding"
     },
     "notes": [
         "Build VishAI Startup"

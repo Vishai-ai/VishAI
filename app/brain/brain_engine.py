@@ -30,12 +30,16 @@ class BrainEngine:
 
         elif intent == "memory_recall":
 
-            key, _ = self.parser.parse_memory(user_input)
+            key = self.parser.parse_recall(user_input)
 
             if key:
                 value = self.memory.get_fact(key)
-                return value
 
-            return self.memory.get_user_name()
+                if value:
+                    return value
+
+                return f"I don't know your {key.replace('_', ' ')}."
+
+            return "I couldn't understand your question."
 
         return "Unknown command."
