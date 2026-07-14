@@ -2,19 +2,25 @@ from app.core.logger import logger
 
 
 class IntentDetector:
-    """Detects user intent."""
+    """Detects the user's intent."""
+
+    def __init__(self):
+        self.rules = {
+            "remember": "memory_save",
+            "what": "memory_recall",
+            "open": "automation",
+            "search": "search",
+            "create task": "task",
+            "learn": "knowledge",
+        }
 
     def detect(self, text: str) -> str:
-        text = text.lower()
+        text = text.lower().strip()
 
-        if text.startswith("remember"):
-            return "memory_save"
+        for keyword, intent in self.rules.items():
+            if text.startswith(keyword):
+                logger.info(f"Detected Intent: {intent}")
+                return intent
 
-        elif text.startswith("what"):
-            return "memory_recall"
-
-        elif text.startswith("create task"):
-            return "task"
-
-        logger.info(f"Unknown intent: {text}")
+        logger.info("Detected Intent: unknown")
         return "unknown"

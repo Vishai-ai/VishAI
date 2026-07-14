@@ -9,6 +9,19 @@ class WindowsAutomation:
     def __init__(self):
         self.config = ConfigManager()
 
+
+
+    def open_app(self, executable: str):
+        """Open any application using its executable."""
+
+        try:
+             subprocess.Popen(executable)
+
+             return f"Opening {executable}"
+
+        except Exception as e:
+             return f"Failed to open {executable}: {e}"
+    
     def open_calculator(self):
         """Open Windows Calculator."""
 
