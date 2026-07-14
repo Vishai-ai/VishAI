@@ -421,3 +421,10 @@ Brain → Memory Communication
 Current Goal
 
 Teach VishAI to remember user information and answer it intelligently.
+
+Automation Layer
+
+- Windows Automation
+- Browser Automation
+- File Automation
+- System Commands
