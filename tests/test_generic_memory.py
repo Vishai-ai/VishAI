@@ -1,5 +1,5 @@
-from app.memory.memory_manager import MemoryManager
 from app.brain.brain_engine import BrainEngine
+from app.memory.memory_manager import MemoryManager
 
 memory = MemoryManager()
 brain = BrainEngine(memory)
