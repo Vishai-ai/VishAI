@@ -12,3 +12,9 @@ class ConfigManager:
 
     def get(self, key):
         return self.settings.get(key)
+    
+    def save(self):
+        import json
+
+        with open(self.config_path, "w", encoding="utf-8") as file:
+            json.dump(self.settings, file, indent=4)
