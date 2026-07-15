@@ -1,16 +1,22 @@
-# Python cache
+# Python
 __pycache__/
 *.pyc
-
-# Virtual Environment
 .venv/
-venv/
 
-# VS Code
-.vscode/
+# Environment
+.env
 
 # Logs
-*.log
+logs/
 
-# Environment files
-.env
+# Temporary
+temp/
+
+# IDE
+.vscode/
+
+# Models
+models/
+
+# Audio
+recordings/

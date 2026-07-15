@@ -28,3 +28,10 @@ v0.1.0-dev
 - Session Memory
 - Scheduler
 - Voice Engine
+
+## Current Milestone
+
+Milestone 2 — Voice System Architecture
+
+Status:
+Planning

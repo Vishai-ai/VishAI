@@ -1,0 +1,23 @@
+# Core AI
+ollama
+
+# Voice
+openwakeword
+faster-whisper
+sounddevice
+soundfile
+
+# Text To Speech
+piper-tts
+
+# Vision
+mss
+paddleocr
+
+# Browser Automation
+playwright
+
+# Utilities
+python-dotenv
+rich
+psutil
