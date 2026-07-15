@@ -9,13 +9,15 @@ from app.nlu.pipeline import NLUPipeline
 class BrainEngine:
     """Main decision engine."""
 
-    def __init__(self, memory_manager):
+    def __init__(self, memory_manager, plugin_manager):
+       
         self.memory = memory_manager
         self.intent = IntentDetector()
         self.parser = CommandParser()
         self.router = CommandRouter()
         self.automation = AutomationManager()
         self.nlu = NLUPipeline()
+        self.plugins = plugin_manager
 
         logger.info("Brain Engine Initialized")
 
@@ -53,5 +55,19 @@ class BrainEngine:
                 return f"I don't know your {key.replace('_', ' ')}."
 
             return "I couldn't understand your question."
+
+        return "Unknown command."
+             
+        if intent.startswith("memory"):
+
+             plugin = self.plugins.get_plugin("memory")
+
+             return plugin.execute(user_input)
+
+        elif intent in ["app", "website", "automation"]:
+
+            plugin = self.plugins.get_plugin("automation")
+
+            return plugin.execute(user_input)
 
         return "Unknown command."

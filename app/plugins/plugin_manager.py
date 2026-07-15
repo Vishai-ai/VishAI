@@ -5,10 +5,11 @@ from app.plugins.automation_plugin import AutomationPlugin
 class PluginManager:
     """Loads and manages VishAI plugins."""
 
-    def __init__(self):
+    def __init__(self, memory_manager, automation_manager):
+
         self.plugins = {
-            "memory": MemoryPlugin(),
-            "automation": AutomationPlugin(),
+            "memory": MemoryPlugin(memory_manager),
+            "automation": AutomationPlugin(automation_manager),
         }
 
     def get_plugin(self, name: str):
