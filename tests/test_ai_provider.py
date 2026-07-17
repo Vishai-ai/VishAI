@@ -1,9 +1,11 @@
-from app.ai.providers.ollama_provider import OllamaProvider
-from app.ai.providers.gemini_provider import GeminiProvider
+from app.ai.ai_manager import AIManager
 
-ollama = OllamaProvider()
-gemini = GeminiProvider()
+ai = AIManager()
 
-print(ollama.generate("Hello"))
+print("Current Provider :", ai.current_provider())
 
-print(gemini.generate("Hello"))
+print()
+
+response = ai.generate("Introduce yourself in one sentence.")
+
+print(response)

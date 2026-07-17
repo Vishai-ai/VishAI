@@ -1,8 +1,5 @@
 from app.brain.brain_engine import BrainEngine
-from app.memory.memory_manager import MemoryManager
 
-memory = MemoryManager()
-brain = BrainEngine(memory)
+brain = BrainEngine()
 
-print(brain.think("Remember my favorite car is BMW"))
-print(brain.think("What is my favorite car?"))
+print(brain.process("What is Python?"))

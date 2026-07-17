@@ -1,26 +1,33 @@
-from app.core.logger import logger
+from app.brain.intent import Intent
 
 
 class IntentDetector:
-    """Detects the user's intent."""
 
-    def __init__(self):
-        self.rules = {
-            "remember": "memory_save",
-            "what": "memory_recall",
-            "open": "automation",
-            "search": "search",
-            "create task": "task",
-            "learn": "knowledge",
-        }
+    def detect(self, prompt: str) -> Intent:
 
-    def detect(self, text: str) -> str:
-        text = text.lower().strip()
+        text = prompt.lower()
 
-        for keyword, intent in self.rules.items():
-            if text.startswith(keyword):
-                logger.info(f"Detected Intent: {intent}")
-                return intent
+        if any(word in text for word in [
+            "open",
+            "close",
+            "start",
+            "launch"
+        ]):
+            return Intent.AUTOMATION
 
-        logger.info("Detected Intent: unknown")
-        return "unknown"
+        if any(word in text for word in [
+            "remember",
+            "save",
+            "store"
+        ]):
+            return Intent.MEMORY
+
+        if any(word in text for word in [
+            "code",
+            "python",
+            "bug",
+            "error"
+        ]):
+            return Intent.CODING
+
+        return Intent.AI_CHAT
