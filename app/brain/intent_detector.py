@@ -2,32 +2,43 @@ from app.brain.intent import Intent
 
 
 class IntentDetector:
+    """Detects the user's intent."""
 
-    def detect(self, prompt: str) -> Intent:
-
-        text = prompt.lower()
+    def detect(self, text: str) -> Intent:
+        text = text.lower()
 
         if any(word in text for word in [
             "open",
             "close",
             "start",
-            "launch"
+            "launch",
+            "run"
         ]):
             return Intent.AUTOMATION
 
         if any(word in text for word in [
             "remember",
             "save",
-            "store"
+            "store",
+            "forget"
         ]):
             return Intent.MEMORY
 
         if any(word in text for word in [
             "code",
             "python",
-            "bug",
-            "error"
+            "program",
+            "debug",
+            "function"
         ]):
             return Intent.CODING
+
+        if any(word in text for word in [
+            "search",
+            "find",
+            "look up",
+            "google"
+        ]):
+            return Intent.SEARCH
 
         return Intent.AI_CHAT
