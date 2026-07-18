@@ -1,12 +1,29 @@
+from collections import defaultdict
+
+
 class EventBus:
-    """Simple publish-subscribe event system."""
+    """
+    Central communication hub for VishAI.
+
+    Modules publish events.
+    Other modules subscribe to events.
+
+    This keeps modules independent.
+    """
 
     def __init__(self):
-        self.listeners = {}
 
-    def subscribe(self, event_name, callback):
-        self.listeners.setdefault(event_name, []).append(callback)
+        self.listeners = defaultdict(list)
 
-    def publish(self, event_name, data=None):
-        for callback in self.listeners.get(event_name, []):
+    def subscribe(self, event_name: str, callback):
+
+        self.listeners[event_name].append(callback)
+
+    def publish(self, event_name: str, data=None):
+
+        if event_name not in self.listeners:
+            return
+
+        for callback in self.listeners[event_name]:
+
             callback(data)

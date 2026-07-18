@@ -1,17 +1,27 @@
 from app.events.event_bus import EventBus
 
+
 bus = EventBus()
 
 
-def logger(data):
-    print(f"LOG: {data}")
+def memory_listener(data):
+
+    print("Memory received:", data)
 
 
-def dashboard(data):
-    print(f"DASHBOARD: {data}")
+def planner_listener(data):
+
+    print("Planner received:", data)
 
 
-bus.subscribe("app_opened", logger)
-bus.subscribe("app_opened", dashboard)
+bus.subscribe("user_message", memory_listener)
 
-bus.publish("app_opened", "Calculator")
+bus.subscribe("user_message", planner_listener)
+
+bus.publish(
+
+    "user_message",
+
+    "Hello VishAI"
+
+)

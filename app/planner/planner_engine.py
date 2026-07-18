@@ -1,72 +1,69 @@
-from dataclasses import dataclass
-from typing import List
-
-from app.core.base_engine import BaseEngine
+from app.planner.plan import Plan
+from app.planner.task import Task
 
 
-@dataclass
-class Plan:
-
-    goal: str
-
-    steps: List[str]
-
-
-class PlannerEngine(BaseEngine):
+class PlannerEngine:
     """
-    Converts a user goal into executable steps.
+    Converts user requests into executable plans.
     """
 
-    def __init__(self):
-        super().__init__("Planner")
+    def create_plan(self, command: str) -> Plan:
 
-    def initialize(self) -> bool:
+        text = command.lower()
 
-        self.initialized = True
-        return True
+        plan = Plan()
 
-    def shutdown(self):
+        # ---------------- Notepad ----------------
 
-        self.initialized = False
+        if "notepad" in text:
 
-    def health(self):
+            plan.add(
+                Task(
+                    action="open_app",
+                    target="notepad"
+                )
+            )
 
-        return {
-            "engine": self.name,
-            "initialized": self.initialized
-        }
+        # ---------------- Calculator ----------------
 
-    def create_plan(self, goal: str) -> Plan:
+        elif "calculator" in text or "calc" in text:
 
-        text = goal.lower()
+            plan.add(
+                Task(
+                    action="open_app",
+                    target="calculator"
+                )
+            )
 
-        steps = []
+        # ---------------- Paint ----------------
 
-        if "chrome" in text:
+        elif "paint" in text:
 
-            steps.append("Open Chrome")
+            plan.add(
+                Task(
+                    action="open_app",
+                    target="paint"
+                )
+            )
 
-        if "google" in text:
+        # ---------------- CMD ----------------
 
-            steps.append("Open Google")
+        elif "cmd" in text:
 
-        if "youtube" in text:
+            plan.add(
+                Task(
+                    action="open_app",
+                    target="cmd"
+                )
+            )
 
-            steps.append("Open YouTube")
+        else:
 
-        if "search" in text:
+            plan.add(
+                Task(
+                    action="chat",
+                    value=command
+                )
+            )
 
-            steps.append("Perform Search")
-
-        if "close" in text:
-
-            steps.append("Close Application")
-
-        if not steps:
-
-            steps.append("Think about the request")
-
-        return Plan(
-            goal=goal,
-            steps=steps
-        )
+        return plan

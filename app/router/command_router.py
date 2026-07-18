@@ -1,19 +1,26 @@
-from app.core.logger import logger
+from app.brain.intent import Intent
 
 
 class CommandRouter:
-    """Routes commands to the correct module."""
+    """
+    Routes requests to the correct subsystem.
+    """
 
-    def route(self, intent: str) -> str:
-        routes = {
-            "memory_save": "memory",
-            "memory_recall": "memory",
-            "automation": "automation",
-            "knowledge": "knowledge",
-        }
+    def route(self, intent: Intent) -> str:
 
-        module = routes.get(intent, "unknown")
+        if intent == Intent.AI_CHAT:
+            return "ai"
 
-        logger.info(f"Routing -> {module}")
+        elif intent == Intent.AUTOMATION:
+            return "automation"
 
-        return module
+        elif intent == Intent.MEMORY:
+            return "memory"
+
+        elif intent == Intent.SEARCH:
+            return "knowledge"
+
+        elif intent == Intent.CODING:
+            return "coding"
+
+        return "unknown"
