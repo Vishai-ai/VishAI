@@ -68,6 +68,8 @@ Core Modules
 
 ✔ Event Bus
 
+✔ Service Registry
+
 Context Window
 
 Intent Detector
@@ -97,6 +99,8 @@ Automation Pipeline
 Action Parsing
 
 Command Routing
+
+Service Registry
 
 # ===========================================
 # CURRENT PROJECT STATUS
@@ -172,6 +176,8 @@ Phase 1
 
 ✔ Event Bus
 
+✔ Service Registry
+
 Phase 2
 
 Desktop Automation
@@ -236,7 +242,7 @@ Self Improvement
 
 Current Task:
 
-Integrate Event Bus into BrainEngine.
+Refactor BrainEngine to use Service Registry.
 
 Status:
 
