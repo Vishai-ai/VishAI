@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from typing import List
+
+from app.core.base_engine import BaseEngine
 
 
 @dataclass
@@ -6,18 +9,64 @@ class Plan:
 
     goal: str
 
-    steps: list[str]
+    steps: List[str]
 
 
-class PlannerEngine:
-
+class PlannerEngine(BaseEngine):
     """
-    Breaks one user request into executable steps.
+    Converts a user goal into executable steps.
     """
 
-    def create_plan(self, user_input: str) -> Plan:
+    def __init__(self):
+        super().__init__("Planner")
+
+    def initialize(self) -> bool:
+
+        self.initialized = True
+        return True
+
+    def shutdown(self):
+
+        self.initialized = False
+
+    def health(self):
+
+        return {
+            "engine": self.name,
+            "initialized": self.initialized
+        }
+
+    def create_plan(self, goal: str) -> Plan:
+
+        text = goal.lower()
+
+        steps = []
+
+        if "chrome" in text:
+
+            steps.append("Open Chrome")
+
+        if "google" in text:
+
+            steps.append("Open Google")
+
+        if "youtube" in text:
+
+            steps.append("Open YouTube")
+
+        if "search" in text:
+
+            steps.append("Perform Search")
+
+        if "close" in text:
+
+            steps.append("Close Application")
+
+        if not steps:
+
+            steps.append("Think about the request")
 
         return Plan(
-            goal=user_input,
-            steps=[user_input]
+            goal=goal,
+            steps=steps
         )

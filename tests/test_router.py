@@ -1,9 +1,10 @@
-from app.router.command_router import CommandRouter
+from app.router.router_engine import RouterEngine
+from app.brain.intent import Intent
 
-router = CommandRouter()
+router = RouterEngine()
 
-print(router.route("memory_save"))
-print(router.route("memory_recall"))
-print(router.route("automation"))
-print(router.route("knowledge"))
-print(router.route("xyz"))
+print(router.route(Intent.AI_CHAT))
+print(router.route(Intent.MEMORY))
+print(router.route(Intent.AUTOMATION))
+print(router.route(Intent.CODING))
+print(router.route(Intent.SEARCH))

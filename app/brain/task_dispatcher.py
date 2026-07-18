@@ -1,24 +1,36 @@
 from app.brain.intent import Intent
+from app.ai.ai_manager import AIManager
 
 
 class TaskDispatcher:
-    """Routes tasks based on detected intent."""
+    """
+    Dispatches intents to the correct engine.
+    """
 
-    def dispatch(self, intent: Intent) -> str:
+    def __init__(self):
 
-        if intent == Intent.AUTOMATION:
-            return "Automation Module"
+        self.ai = AIManager()
 
-        elif intent == Intent.MEMORY:
-            return "Memory Module"
+        # Future
+        self.memory = None
+        self.automation = None
+        self.search = None
+        self.coding = None
 
-        elif intent == Intent.CODING:
-            return "Coding Module"
+    def dispatch(self, intent: Intent):
 
-        elif intent == Intent.SEARCH:
-            return "Search Module"
+        routes = {
 
-        elif intent == Intent.AI_CHAT:
-            return "AI Chat Module"
+            Intent.AI_CHAT: self.ai,
 
-        return "Unknown Module"
+            Intent.AUTOMATION: self.automation,
+
+            Intent.MEMORY: self.memory,
+
+            Intent.CODING: self.coding,
+
+            Intent.SEARCH: self.search,
+
+        }
+
+        return routes.get(intent)
