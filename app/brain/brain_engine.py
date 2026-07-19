@@ -9,8 +9,15 @@ from app.ai.ai_manager import AIManager
 
 from app.planner.planner_engine import PlannerEngine
 from app.planner.plan_executor import PlanExecutor
+
 from app.memory.memory_service import MemoryService
 from app.knowledge.knowledge_service import KnowledgeService
+
+from app.pipeline.request import Request
+from app.pipeline.response import Response
+from app.intents.memory_intent import MemoryIntent
+from app.intents.automation_intent import AutomationIntent
+from app.intents.ai_intent import AIIntent
 
 
 class BrainEngine(BaseEngine):
@@ -19,41 +26,79 @@ class BrainEngine(BaseEngine):
 
     Responsibilities
     ----------------
-    - Receive user input
-    - Store conversation
-    - Detect intent
-    - Decide AI or Automation
-    - Execute plans
-    - Return response
+    • Receive user input
+    • Store conversation
+    • Use local memory
+    • Search local knowledge
+    • Detect intent
+    • Execute automation
+    • Ask AI when required
+    • Return Response object
     """
 
     def __init__(self):
-        super().__init__("Brain")
 
-        # ---------------- Conversation ----------------
+        super().__init__("Brain")
+        
+        # ------------------------------------
+        # Conversation
+        # ------------------------------------
 
         self.conversation = ConversationManager()
         self.context = ContextWindow()
-        self.memory = MemoryService()
-        self.knowledge = KnowledgeService()
 
-        # ---------------- Intelligence ----------------
+        # ------------------------------------
+        # Services
+        # ------------------------------------
+
+        self.memory = MemoryService()
+        
+        self.knowledge = KnowledgeService()
+        
+        self.memory_intent = MemoryIntent(
+            self.memory
+        )
+        
+        
+
+        # ------------------------------------
+        # Intelligence
+        # ------------------------------------
 
         self.detector = IntentDetector()
-
         self.ai = AIManager()
 
-        # ---------------- Planning ----------------
+        # ------------------------------------
+        # Planning
+        # ------------------------------------
 
         self.planner = PlannerEngine()
         self.executor = PlanExecutor()
+        self.automation_intent = AutomationIntent(
 
-        # ---------------- State ----------------
+            self.planner,
+
+            self.executor
+
+        )
+
+        # ------------------------------------
+        # Intent Handlers
+        # ------------------------------------
+
+        self.ai_intent = AIIntent(
+            self.ai,
+            self.knowledge
+        )
+
+        # ------------------------------------
+        # State
+        # ------------------------------------
 
         self.initialized = False
 
     # =====================================================
-    # Engine Lifecycle
+    # Lifecycle
     # =====================================================
 
     def initialize(self):
@@ -83,67 +128,82 @@ class BrainEngine(BaseEngine):
     def process(self, user_input: str):
 
         if not self.initialized:
+
             raise RuntimeError(
                 "BrainEngine is not initialized."
             )
 
-        # ----------------------------------------
-        # Save User Message
-        # ----------------------------------------
+        # ------------------------------------
+        # Request Object
+        # ------------------------------------
 
-        self.conversation.add_user_message(
-            user_input
+        request = Request(
+            text=user_input
         )
         
-        # Store latest user message
+        response = self.memory_intent.handle(request)
+
+        if response is not None:
+
+            return response
+        
+        text = request.text.lower().strip()
+
+        # ------------------------------------
+        # Save Conversation
+        # ------------------------------------
+
+        self.conversation.add_user_message(user_input)
+
+        # ------------------------------------
+        # Save User Message
+        # ------------------------------------
+
         self.memory.remember(user_input)
-        # ----------------------------------------
-        # Detect Intent
-        # ----------------------------------------
+
+        
+        # =====================================================
+        # INTENT DETECTION
+        # =====================================================
 
         intent = self.detector.detect(
             user_input
         )
 
-        # ----------------------------------------
-        # AI Conversation
-        # ----------------------------------------
+        # =====================================================
+        # AI CHAT
+        # =====================================================
 
         if intent.name == "AI_CHAT":
 
-            # 1. Search local knowledge
-            knowledge = self.knowledge.search(user_input)
+            return self.ai_intent.handle(request)
 
-            if knowledge is not None:
-
-                response = knowledge
-
-            else:
-
-                response = self.ai.generate(user_input)
-
-        # ----------------------------------------
-        # Automation / Planner
-        # ----------------------------------------
+        # =====================================================
+        # AUTOMATION
+        # =====================================================
 
         else:
 
-            plan = self.planner.create_plan(
-                user_input
+            return self.automation_intent.handle(
+                request
             )
 
-            results = self.executor.execute(
-                plan
-            )
-
-            response = "\n".join(results)
-
-        # ----------------------------------------
-        # Save AI Response
-        # ----------------------------------------
+        # ------------------------------------
+        # Save Assistant Message
+        # ------------------------------------
 
         self.conversation.add_assistant_message(
             response
         )
 
-        return response
+        # ------------------------------------
+        # Response Object
+        # ------------------------------------
+
+        return Response(
+
+            success=True,
+
+            message=response
+
+        )

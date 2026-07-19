@@ -1,28 +1,17 @@
-from app.core.container import AppContainer
+from app.kernel.launcher import Launcher
 
 
 def main():
 
-    container = AppContainer()
+    launcher = Launcher()
 
-    brain = container.brain
+    launcher.initialize()
 
-    print("=" * 50)
-    print("        Welcome to VishAI OS")
-    print("=" * 50)
+    launcher.run()
 
-    while True:
-
-        user = input("\nYou : ")
-
-        if user.lower() in ["exit", "quit"]:
-            print("Goodbye!")
-            break
-
-        response = brain.think(user)
-
-        print("VishAI :", response)
+    launcher.shutdown()
 
 
 if __name__ == "__main__":
+
     main()

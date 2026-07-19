@@ -10,9 +10,9 @@ class MemoryService:
 
         self.manager = MemoryManager()
 
-    # -----------------------------
+    # ===================================================
     # Notes
-    # -----------------------------
+    # ===================================================
 
     def remember(self, note: str):
 
@@ -22,9 +22,9 @@ class MemoryService:
 
         return self.manager.get_notes()
 
-    # -----------------------------
+    # ===================================================
     # Facts
-    # -----------------------------
+    # ===================================================
 
     def remember_fact(self, key: str, value: str):
 
@@ -34,9 +34,21 @@ class MemoryService:
 
         return self.manager.get_fact(key)
 
-    # -----------------------------
+    # ---------------------------------------------------
+    # Aliases (For BrainEngine)
+    # ---------------------------------------------------
+
+    def set_fact(self, key: str, value: str):
+
+        self.manager.set_fact(key, value)
+
+    def get_fact(self, key: str):
+
+        return self.manager.get_fact(key)
+
+    # ===================================================
     # User
-    # -----------------------------
+    # ===================================================
 
     def get_user_name(self):
 

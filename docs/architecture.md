@@ -428,3 +428,56 @@ Automation Layer
 - Browser Automation
 - File Automation
 - System Commands
+
+
+# VishAI Architecture
+
+User
+
+↓
+
+Brain Engine
+
+↓
+
+Service Registry
+
+↓
+
+Services
+
+AI Service
+
+Memory Service
+
+Knowledge Service
+
+Planner Service
+
+Automation Service
+
+↓
+
+Managers
+
+AI Manager
+
+Memory Manager
+
+Knowledge Base
+
+Planner Engine
+
+Automation Engine
+
+↓
+
+Operating System
+
+Windows
+
+Browser
+
+Voice
+
+Vision

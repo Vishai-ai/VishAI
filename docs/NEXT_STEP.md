@@ -1,7 +1,11 @@
 # Next Step
 
-Current Task:
-Integrate Event Bus with Brain Engine
+# Current Task
+
+Integrate Service Registry into BrainEngine
+
+Status:
+In Progress
 
 Files:
 - app/events/event_bus.py
