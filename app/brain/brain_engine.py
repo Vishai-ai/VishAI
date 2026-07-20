@@ -21,6 +21,9 @@ from app.intents.automation_intent import AutomationIntent
 from app.intents.ai_intent import AIIntent
 
 from app.nlu.command_parser import CommandParser
+from app.brain.command_parser import CommandParser
+from app.brain.request_router import RequestRouter
+from app.intents.browser_intent import BrowserIntent
 
 
 class BrainEngine(BaseEngine):
@@ -103,6 +106,22 @@ class BrainEngine(BaseEngine):
 
         self.initialized = False
 
+        # -----------------------------
+        # Parser
+        # -----------------------------
+
+        self.parser = CommandParser()
+
+        # -----------------------------
+        # Router
+        # -----------------------------
+       # self.browser_intent = BrowserIntent()
+        #self.router = RequestRouter(
+         #   self.memory_intent,
+          #  self.browser_intent,
+           # self.automation_intent,
+            #self.ai_intent
+        )
     # =====================================================
     # Lifecycle
     # =====================================================
@@ -194,10 +213,22 @@ class BrainEngine(BaseEngine):
         # Intent Detection
         # ------------------------------------
 
-        intent = self.detector.detect(
-            user_input
-        )
+        parsed = self.parser.parse(user_input)
 
+        # अगर Parser ने Action पहचाना है
+        if parsed["action"]:
+
+            plan = self.planner.create_plan(parsed)
+
+            results = self.executor.execute(plan)
+
+            return Response(
+                success=True,
+                message="\n".join(results)
+             )
+
+        # नहीं तो Router को भेजो
+        return self.router.route(request)
         # ------------------------------------
         # AI
         # ------------------------------------
