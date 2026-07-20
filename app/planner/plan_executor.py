@@ -1,4 +1,8 @@
+import time
+
 from app.automation.command_executor import CommandExecutor
+from app.automation.automation_engine import AutomationEngine
+from app.browser.browser_manager import BrowserManager
 
 
 class PlanExecutor:
@@ -10,19 +14,36 @@ class PlanExecutor:
 
         self.executor = CommandExecutor()
 
+        self.automation = AutomationEngine()
+        self.automation.initialize()
+
+        self.browser = BrowserManager()
+
+    # =====================================================
+    # Execute Complete Plan
+    # =====================================================
+
     def execute(self, plan):
 
         results = []
 
         for task in plan:
 
-            results.append(
-                self.execute_task(task)
-            )
+            result = self.execute_task(task)
+
+            results.append(result)
 
         return results
 
+    # =====================================================
+    # Execute One Task
+    # =====================================================
+
     def execute_task(self, task):
+
+        # ------------------------------------------
+        # Open Desktop Application
+        # ------------------------------------------
 
         if task.action == "open_app":
 
@@ -30,8 +51,88 @@ class PlanExecutor:
                 f"open {task.target}"
             )
 
+        # ------------------------------------------
+        # Wait
+        # ------------------------------------------
+
+        elif task.action == "wait":
+
+            seconds = task.value or 1
+
+            time.sleep(seconds)
+
+            return f"Waited {seconds} second(s)."
+
+        # ------------------------------------------
+        # Type Text
+        # ------------------------------------------
+
+        elif task.action == "type":
+
+            self.automation.type_text(task.value)
+
+            return f"Typed: {task.value}"
+
+        # ------------------------------------------
+        # Press Key
+        # ------------------------------------------
+
+        elif task.action == "press":
+
+            self.automation.press(task.value)
+
+            return f"Pressed: {task.value}"
+
+        # ------------------------------------------
+        # Hotkey
+        # ------------------------------------------
+
+        elif task.action == "hotkey":
+
+            if isinstance(task.value, (list, tuple)):
+
+                self.automation.hotkey(*task.value)
+
+                return "Pressed hotkey: " + " + ".join(task.value)
+
+            return "Invalid hotkey."
+
+        # ------------------------------------------
+        # Browser
+        # ------------------------------------------
+
+        elif task.action == "browser":
+
+            target = task.target.lower()
+
+            if target == "youtube":
+
+                return self.browser.open_youtube()
+
+            elif target == "google":
+
+                return self.browser.open_google()
+
+            elif target == "github":
+
+                return self.browser.open_github()
+
+            elif target == "gmail":
+
+                return self.browser.open_gmail()
+
+            return f"Unknown browser target: {target}"
+
+        # ------------------------------------------
+        # AI Chat
+        # ------------------------------------------
+
         elif task.action == "chat":
 
             return "Forward to AI"
+
+        # ------------------------------------------
+        # Unknown
+        # ------------------------------------------
 
         return "Unknown Task"
