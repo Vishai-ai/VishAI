@@ -1,9 +1,6 @@
-from pathlib import Path
-
-
 class AppRegistry:
     """
-    Stores all applications known by VishAI.
+    Central registry for all applications supported by VishAI.
     """
 
     def __init__(self):
@@ -13,20 +10,28 @@ class AppRegistry:
             "notepad": "notepad.exe",
 
             "calculator": "calc.exe",
+            "calc": "calc.exe",
 
             "paint": "mspaint.exe",
 
             "cmd": "cmd.exe",
-
-            "explorer": "explorer.exe",
+            "command prompt": "cmd.exe",
 
             "powershell": "powershell.exe",
 
+            "explorer": "explorer.exe",
+
+            "chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+
+            "edge": r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+
+            "vscode": r"C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\Code.exe",
+            "visual studio code": r"C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\Code.exe",
         }
 
     def get(self, name: str):
 
-        return self.apps.get(name.lower())
+        return self.apps.get(name.lower().strip())
 
     def register(self, name: str, executable: str):
 
@@ -34,8 +39,20 @@ class AppRegistry:
 
     def exists(self, name: str):
 
-        return name.lower() in self.apps
+        return name.lower().strip() in self.apps
 
     def all_apps(self):
 
         return self.apps
+
+    def search(self, text: str):
+
+        text = text.lower()
+
+        for app in self.apps:
+
+            if app in text:
+
+                return app
+
+        return None

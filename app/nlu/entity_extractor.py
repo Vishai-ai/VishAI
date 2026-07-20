@@ -1,14 +1,48 @@
 class EntityExtractor:
     """
-    Extracts entities from text.
-
-    Example
-
-    Open Chrome
-
-    Entity = Chrome
+    Extracts entities like application names from text.
     """
 
-    def extract(self, text: str):
+    def __init__(self):
 
-        return {}
+        self.app_aliases = {
+
+            "chrome": "chrome",
+
+            "google chrome": "chrome",
+
+            "calculator": "calculator",
+
+            "calc": "calculator",
+
+            "paint": "paint",
+
+            "notepad": "notepad",
+
+            "command prompt": "cmd",
+
+            "cmd": "cmd",
+
+            "powershell": "powershell",
+
+            "explorer": "explorer",
+
+            "visual studio code": "vscode",
+
+            "vs code": "vscode",
+
+            "vscode": "vscode",
+
+        }
+
+    def extract_application(self, text: str):
+
+        text = text.lower()
+
+        for alias, app in self.app_aliases.items():
+
+            if alias in text:
+
+                return app
+
+        return None

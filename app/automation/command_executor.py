@@ -2,6 +2,12 @@ from app.desktop.desktop_service import DesktopService
 
 
 class CommandExecutor:
+    """
+    Executes automation commands.
+
+    This class should NEVER know how applications
+    are opened. It delegates everything to DesktopService.
+    """
 
     def __init__(self):
 
@@ -9,28 +15,10 @@ class CommandExecutor:
 
     def execute(self, command: str):
 
-        text = command.lower().strip()
+        if not command:
 
-        trigger_words = [
+            return "Empty command."
 
-            "open",
+        success, message = self.desktop.execute(command)
 
-            "launch",
-
-            "start",
-
-            "run",
-
-            "execute",
-
-            "khol",
-
-            "khol"
-
-        ]
-
-        if any(word in text for word in trigger_words):
-
-            return self.desktop.execute(text)
-
-        return False, "Unknown command."
+        return message
