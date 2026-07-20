@@ -1,58 +1,164 @@
+from pathlib import Path
+
+
 class AppRegistry:
     """
     Central registry for all applications supported by VishAI.
+
+    Responsibilities
+    ----------------
+    - Store all known applications
+    - Return executable path
+    - Search applications inside text
+    - Categorize applications
     """
 
     def __init__(self):
 
         self.apps = {
 
-            "notepad": "notepad.exe",
+            # ==========================================
+            # Desktop Applications
+            # ==========================================
 
-            "calculator": "calc.exe",
-            "calc": "calc.exe",
+            "desktop": {
 
-            "paint": "mspaint.exe",
+                "notepad": "notepad.exe",
 
-            "cmd": "cmd.exe",
-            "command prompt": "cmd.exe",
+                "calculator": "calc.exe",
+                "calc": "calc.exe",
 
-            "powershell": "powershell.exe",
+                "paint": "mspaint.exe",
 
-            "explorer": "explorer.exe",
+                "cmd": "cmd.exe",
+                "command prompt": "cmd.exe",
 
-            "chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                "powershell": "powershell.exe",
 
-            "edge": r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+                "explorer": "explorer.exe",
 
-            "vscode": r"C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\Code.exe",
-            "visual studio code": r"C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\Code.exe",
+                "vscode": r"C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\Code.exe",
+
+                "visual studio code": r"C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\Code.exe",
+
+            },
+
+            # ==========================================
+            # Browsers
+            # ==========================================
+
+            "browser": {
+
+                "chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+
+                "google chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+
+                "edge": r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+
+                "microsoft edge": r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+
+            }
+
         }
+
+    # ===================================================
+    # Get executable
+    # ===================================================
 
     def get(self, name: str):
 
-        return self.apps.get(name.lower().strip())
+        name = name.lower().strip()
 
-    def register(self, name: str, executable: str):
+        for category in self.apps.values():
 
-        self.apps[name.lower()] = executable
+            if name in category:
+
+                return category[name]
+
+        return None
+
+    # ===================================================
+    # Get category
+    # ===================================================
+
+    def category(self, name: str):
+
+        name = name.lower().strip()
+
+        for category_name, category in self.apps.items():
+
+            if name in category:
+
+                return category_name
+
+        return None
+
+    # ===================================================
+    # Register new application
+    # ===================================================
+
+    def register(
+
+        self,
+
+        category: str,
+
+        name: str,
+
+        executable: str
+
+    ):
+
+        category = category.lower().strip()
+
+        name = name.lower().strip()
+
+        if category not in self.apps:
+
+            self.apps[category] = {}
+
+        self.apps[category][name] = executable
+
+    # ===================================================
+    # Exists
+    # ===================================================
 
     def exists(self, name: str):
 
-        return name.lower().strip() in self.apps
+        return self.get(name) is not None
 
-    def all_apps(self):
-
-        return self.apps
+    # ===================================================
+    # Search inside text
+    # ===================================================
 
     def search(self, text: str):
 
         text = text.lower()
 
-        for app in self.apps:
+        for category in self.apps.values():
 
-            if app in text:
+            for app in category:
 
-                return app
+                if app in text:
+
+                    return app
 
         return None
+
+    # ===================================================
+    # Return all applications
+    # ===================================================
+
+    def all_apps(self):
+
+        return self.apps
+
+    # ===================================================
+    # Return one category
+    # ===================================================
+
+    def all_in_category(self, category: str):
+
+        category = category.lower().strip()
+
+        return self.apps.get(category, {})

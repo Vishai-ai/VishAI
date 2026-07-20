@@ -25,12 +25,11 @@ class PlannerEngine:
 
         if any(word in text for word in trigger_words):
 
-            words = text.split()
+            words = text.split(maxsplit=1)
 
             if len(words) >= 2:
 
-                app = words[-1]
-
+                app = words[1].strip()
                 plan.add(
 
                     Task(
