@@ -15,10 +15,12 @@ from app.knowledge.knowledge_service import KnowledgeService
 
 from app.pipeline.request import Request
 from app.pipeline.response import Response
+
 from app.intents.memory_intent import MemoryIntent
 from app.intents.automation_intent import AutomationIntent
 from app.intents.ai_intent import AIIntent
-from app.intents.desktop_intent import DesktopIntent
+
+from app.nlu.command_parser import CommandParser
 
 
 class BrainEngine(BaseEngine):
@@ -27,20 +29,20 @@ class BrainEngine(BaseEngine):
 
     Responsibilities
     ----------------
-    • Receive user input
-    • Store conversation
-    • Use local memory
-    • Search local knowledge
-    • Detect intent
-    • Execute automation
-    • Ask AI when required
-    • Return Response object
+    - Receive user input
+    - Store conversation
+    - Store memory
+    - Parse natural language
+    - Detect intent
+    - Execute automation
+    - Ask AI
+    - Return Response
     """
 
     def __init__(self):
 
         super().__init__("Brain")
-        
+
         # ------------------------------------
         # Conversation
         # ------------------------------------
@@ -53,20 +55,20 @@ class BrainEngine(BaseEngine):
         # ------------------------------------
 
         self.memory = MemoryService()
-        
         self.knowledge = KnowledgeService()
-        
-        self.memory_intent = MemoryIntent(
-            self.memory
-        )
-        
-        self.desktop_intent = DesktopIntent()
+
+        # ------------------------------------
+        # NLU
+        # ------------------------------------
+
+        self.command_parser = CommandParser()
 
         # ------------------------------------
         # Intelligence
         # ------------------------------------
 
         self.detector = IntentDetector()
+
         self.ai = AIManager()
 
         # ------------------------------------
@@ -74,22 +76,25 @@ class BrainEngine(BaseEngine):
         # ------------------------------------
 
         self.planner = PlannerEngine()
+
         self.executor = PlanExecutor()
-        self.automation_intent = AutomationIntent(
-
-            self.planner,
-
-            self.executor
-
-        )
 
         # ------------------------------------
         # Intent Handlers
         # ------------------------------------
 
+        self.memory_intent = MemoryIntent(
+            self.memory
+        )
+
         self.ai_intent = AIIntent(
             self.ai,
             self.knowledge
+        )
+
+        self.automation_intent = AutomationIntent(
+            self.planner,
+            self.executor
         )
 
         # ------------------------------------
@@ -135,76 +140,90 @@ class BrainEngine(BaseEngine):
             )
 
         # ------------------------------------
-        # Request Object
+        # Request
         # ------------------------------------
 
         request = Request(
             text=user_input
         )
-        
-        response = self.memory_intent.handle(request)
 
-        if response is not None:
+        # ------------------------------------
+        # NLU Parsing
+        # ------------------------------------
 
-            return response
-        
-        text = request.text.lower().strip()
+        parsed_command = self.command_parser.parse(
+            user_input
+        )
+
+        # Future use
+        request.parsed_command = parsed_command
 
         # ------------------------------------
         # Save Conversation
         # ------------------------------------
 
-        self.conversation.add_user_message(user_input)
+        self.conversation.add_user_message(
+            user_input
+        )
 
         # ------------------------------------
-        # Save User Message
+        # Save Memory
         # ------------------------------------
 
-        self.memory.remember(user_input)
+        self.memory.remember(
+            user_input
+        )
 
-        
-        # =====================================================
-        # INTENT DETECTION
-        # =====================================================
+        # ------------------------------------
+        # Memory Intent
+        # ------------------------------------
+
+        response = self.memory_intent.handle(
+            request
+        )
+
+        if response is not None:
+
+            self.conversation.add_assistant_message(
+                response.message
+            )
+
+            return response
+
+        # ------------------------------------
+        # Intent Detection
+        # ------------------------------------
 
         intent = self.detector.detect(
             user_input
         )
 
-        # =====================================================
-        # AI CHAT
-        # =====================================================
+        # ------------------------------------
+        # AI
+        # ------------------------------------
 
         if intent.name == "AI_CHAT":
 
-            return self.ai_intent.handle(request)
-
-        # =====================================================
-        # AUTOMATION
-        # =====================================================
-
-        else:
-
-            return self.automation_intent.handle(
+            response = self.ai_intent.handle(
                 request
             )
 
         # ------------------------------------
-        # Save Assistant Message
+        # Automation
+        # ------------------------------------
+
+        else:
+
+            response = self.automation_intent.handle(
+                request
+            )
+
+        # ------------------------------------
+        # Save Assistant Response
         # ------------------------------------
 
         self.conversation.add_assistant_message(
-            response
+            response.message
         )
 
-        # ------------------------------------
-        # Response Object
-        # ------------------------------------
-
-        return Response(
-
-            success=True,
-
-            message=response
-
-        )
+        return response

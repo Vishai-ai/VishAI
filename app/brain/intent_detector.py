@@ -1,5 +1,4 @@
-from app.brain.intent import Intent
-
+from app.brain.intent_patterns import IntentPatterns
 
 class IntentDetector:
     """Detects the user's intent."""
