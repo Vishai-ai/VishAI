@@ -1,20 +1,18 @@
+from app.brain.command_parser import CommandParser
 from app.planner.planner_engine import PlannerEngine
 
+parser = CommandParser()
 
 planner = PlannerEngine()
 
-planner.initialize()
+parsed = parser.parse(
 
-plan = planner.create_plan(
-    "Open Chrome and search Python on YouTube"
+    "please open chrome"
+
 )
 
-print("Goal:")
-print(plan.goal)
+plan = planner.create_plan(parsed)
 
-print()
+for task in plan:
 
-print("Steps:")
-
-for i, step in enumerate(plan.steps, start=1):
-    print(f"{i}. {step}")
+    print(task)

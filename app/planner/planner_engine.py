@@ -4,53 +4,30 @@ from app.planner.task import Task
 
 class PlannerEngine:
     """
-    Converts user requests into executable plans.
+    Creates execution plans from parsed commands.
     """
 
-    def create_plan(self, command: str) -> Plan:
-
-        text = command.lower().strip()
+    def create_plan(self, parsed):
 
         plan = Plan()
 
-        trigger_words = [
+        action = parsed.get("action")
 
-            "open",
-            "launch",
-            "start",
-            "run",
-            "execute"
+        target = parsed.get("target")
 
-        ]
+        # -----------------------------------------
+        # Open Application
+        # -----------------------------------------
 
-        if any(word in text for word in trigger_words):
-
-            words = text.split(maxsplit=1)
-
-            if len(words) >= 2:
-
-                app = words[1].strip()
-                plan.add(
-
-                    Task(
-
-                        action="open_app",
-
-                        target=app
-
-                    )
-
-                )
-
-        else:
+        if action == "open_app" and target:
 
             plan.add(
 
                 Task(
 
-                    action="chat",
+                    action="open_app",
 
-                    value=command
+                    target=target
 
                 )
 
