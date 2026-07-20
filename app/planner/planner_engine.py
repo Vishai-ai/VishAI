@@ -9,61 +9,52 @@ class PlannerEngine:
 
     def create_plan(self, command: str) -> Plan:
 
-        text = command.lower()
+        text = command.lower().strip()
 
         plan = Plan()
 
-        # ---------------- Notepad ----------------
+        trigger_words = [
 
-        if "notepad" in text:
+            "open",
+            "launch",
+            "start",
+            "run",
+            "execute"
 
-            plan.add(
-                Task(
-                    action="open_app",
-                    target="notepad"
+        ]
+
+        if any(word in text for word in trigger_words):
+
+            words = text.split()
+
+            if len(words) >= 2:
+
+                app = words[-1]
+
+                plan.add(
+
+                    Task(
+
+                        action="open_app",
+
+                        target=app
+
+                    )
+
                 )
-            )
-
-        # ---------------- Calculator ----------------
-
-        elif "calculator" in text or "calc" in text:
-
-            plan.add(
-                Task(
-                    action="open_app",
-                    target="calculator"
-                )
-            )
-
-        # ---------------- Paint ----------------
-
-        elif "paint" in text:
-
-            plan.add(
-                Task(
-                    action="open_app",
-                    target="paint"
-                )
-            )
-
-        # ---------------- CMD ----------------
-
-        elif "cmd" in text:
-
-            plan.add(
-                Task(
-                    action="open_app",
-                    target="cmd"
-                )
-            )
 
         else:
 
             plan.add(
+
                 Task(
+
                     action="chat",
+
                     value=command
+
                 )
+
             )
 
         return plan

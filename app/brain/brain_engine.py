@@ -18,6 +18,7 @@ from app.pipeline.response import Response
 from app.intents.memory_intent import MemoryIntent
 from app.intents.automation_intent import AutomationIntent
 from app.intents.ai_intent import AIIntent
+from app.intents.desktop_intent import DesktopIntent
 
 
 class BrainEngine(BaseEngine):
@@ -59,7 +60,7 @@ class BrainEngine(BaseEngine):
             self.memory
         )
         
-        
+        self.desktop_intent = DesktopIntent()
 
         # ------------------------------------
         # Intelligence
