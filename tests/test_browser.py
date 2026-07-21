@@ -1,7 +1,9 @@
-from app.automation.browser import BrowserAutomation
+from app.browser.browser_manager import BrowserManager
 
-browser = BrowserAutomation()
+browser = BrowserManager()
 
-print(browser.open_website("youtube.com"))
-print(browser.open_website("github.com"))
-print(browser.open_website("google.com"))
+print(browser.open_google())
+
+print(browser.open_youtube())
+
+print(browser.search_google("python tutorial"))

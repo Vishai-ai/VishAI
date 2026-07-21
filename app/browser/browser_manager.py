@@ -1,46 +1,56 @@
 import webbrowser
-from urllib.parse import quote_plus
+import urllib.parse
 
 
 class BrowserManager:
     """
-    Handles browser automation.
+    Browser Automation Manager
     """
 
     def open_url(self, url: str):
 
         webbrowser.open(url)
 
-        return f"Opening {url}"
-
-    def google_search(self, query: str):
-
-        url = f"https://www.google.com/search?q={quote_plus(query)}"
-
-        webbrowser.open(url)
-
-        return f"Searching Google for '{query}'"
-
-    def youtube_search(self, query: str):
-
-        url = f"https://www.youtube.com/results?search_query={quote_plus(query)}"
-
-        webbrowser.open(url)
-
-        return f"Searching YouTube for '{query}'"
-
-    def open_youtube(self):
-
-        return self.open_url("https://www.youtube.com")
+        return f"Opened {url}"
 
     def open_google(self):
 
-        return self.open_url("https://www.google.com")
+        return self.open_url(
+            "https://www.google.com"
+        )
+
+    def open_youtube(self):
+
+        return self.open_url(
+            "https://www.youtube.com"
+        )
 
     def open_github(self):
 
-        return self.open_url("https://github.com")
+        return self.open_url(
+            "https://github.com"
+        )
 
     def open_gmail(self):
 
-        return self.open_url("https://mail.google.com")
+        return self.open_url(
+            "https://mail.google.com"
+        )
+
+    def search_google(self, query: str):
+
+        url = (
+            "https://www.google.com/search?q="
+            + urllib.parse.quote(query)
+        )
+
+        return self.open_url(url)
+
+    def search_youtube(self, query: str):
+
+        url = (
+            "https://www.youtube.com/results?search_query="
+            + urllib.parse.quote(query)
+        )
+
+        return self.open_url(url)
