@@ -1,10 +1,7 @@
-from app.command.parser import CommandParser
+from app.brain.command_parser import CommandParser
 
 parser = CommandParser()
 
-key, value = parser.parse_memory(
-    "Remember my favorite car is BMW"
-)
+result = parser.parse("open notepad")
 
-print(key)
-print(value)
+print(result)

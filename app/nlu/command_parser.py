@@ -4,44 +4,37 @@ from app.nlu.entity_extractor import EntityExtractor
 
 class CommandParser:
     """
-    Converts natural language into structured commands.
+    Converts natural language into a structured command.
     """
 
     def __init__(self):
 
         self.normalizer = TextNormalizer()
-
         self.extractor = EntityExtractor()
 
     def parse(self, text: str):
 
         text = self.normalizer.normalize(text)
 
-        application = self.extractor.extract_application(text)
+        app = self.extractor.extract_application(text)
 
         action = None
 
         if any(word in text for word in [
-
             "open",
-
             "launch",
-
             "start",
-
             "run",
-
             "execute"
-
         ]):
 
-            action = "OPEN"
+            action = "open_app"
 
         return {
 
             "action": action,
 
-            "application": application,
+            "target": app,
 
             "text": text
 
