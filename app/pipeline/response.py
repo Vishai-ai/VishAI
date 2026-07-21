@@ -1,11 +1,14 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class Response:
     """
-    Represents VishAI response.
+    Standard response object.
     """
 
     success: bool
+
     message: str
+
+    data: dict = field(default_factory=dict)
