@@ -14,28 +14,82 @@ class CommandParser:
 
     def parse(self, text: str):
 
-        text = self.normalizer.normalize(text)
+        original_text = text
+
+        text = self.normalizer.normalize(text).lower().strip()
 
         app = self.extractor.extract_application(text)
 
         action = None
+        target = app
+        value = None
 
-        if any(word in text for word in [
+        # ==================================================
+        # Google Search
+        # ==================================================
+
+        if text.startswith("search "):
+
+            action = "search"
+
+            value = text.replace("search", "", 1).strip()
+
+            target = "google"
+
+        # ==================================================
+        # YouTube Search
+        # ==================================================
+
+        elif text.startswith("youtube "):
+
+            action = "youtube_search"
+
+            value = text.replace("youtube", "", 1).strip()
+
+            target = "youtube"
+
+        elif text.startswith("search on youtube "):
+
+            action = "youtube_search"
+
+            value = text.replace("search on youtube", "", 1).strip()
+
+            target = "youtube"
+
+        # ==================================================
+        # Open Applications / Websites
+        # ==================================================
+
+        elif any(word in text for word in [
+
             "open",
+
             "launch",
+
             "start",
+
             "run",
+
             "execute"
+
         ]):
 
             action = "open_app"
+
+        # ==================================================
+        # Return Parsed Command
+        # ==================================================
 
         return {
 
             "action": action,
 
-            "target": app,
+            "target": target,
 
-            "text": text
+            "value": value,
+
+            "text": text,
+
+            "original_text": original_text
 
         }

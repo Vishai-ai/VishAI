@@ -1,56 +1,88 @@
 import webbrowser
-import urllib.parse
+
+from urllib.parse import quote_plus
+
+from app.browser.website_registry import WebsiteRegistry
 
 
 class BrowserManager:
-    """
-    Browser Automation Manager
-    """
 
-    def open_url(self, url: str):
+    def __init__(self):
+
+        self.registry = WebsiteRegistry()
+
+    # --------------------------
+    # Open Website
+    # --------------------------
+
+    def open_site(self, site):
+
+        site = site.lower().strip()
+
+        url = self.registry.get(site)
+
+        if url:
+
+            webbrowser.open(url)
+
+            return f"Opened {site}."
+
+        # Domain name already
+
+        if "." in site:
+
+            webbrowser.open(
+
+                "https://" + site
+
+            )
+
+            return f"Opened {site}."
+
+        # Google Search fallback
+
+        webbrowser.open(
+
+            "https://www.google.com/search?q="
+
+            + quote_plus(site)
+
+        )
+
+        return f"Searching Google for '{site}'."
+
+    # --------------------------
+    # Google Search
+    # --------------------------
+
+    def search_google(self, query):
+
+        url = (
+
+            "https://www.google.com/search?q="
+
+            + quote_plus(query)
+
+        )
 
         webbrowser.open(url)
 
-        return f"Opened {url}"
+        return f"Searching Google for '{query}'."
 
-    def open_google(self):
+    # --------------------------
+    # YouTube Search
+    # --------------------------
 
-        return self.open_url(
-            "https://www.google.com"
-        )
-
-    def open_youtube(self):
-
-        return self.open_url(
-            "https://www.youtube.com"
-        )
-
-    def open_github(self):
-
-        return self.open_url(
-            "https://github.com"
-        )
-
-    def open_gmail(self):
-
-        return self.open_url(
-            "https://mail.google.com"
-        )
-
-    def search_google(self, query: str):
+    def search_youtube(self, query):
 
         url = (
-            "https://www.google.com/search?q="
-            + urllib.parse.quote(query)
-        )
 
-        return self.open_url(url)
-
-    def search_youtube(self, query: str):
-
-        url = (
             "https://www.youtube.com/results?search_query="
-            + urllib.parse.quote(query)
+
+            + quote_plus(query)
+
         )
 
-        return self.open_url(url)
+        webbrowser.open(url)
+
+        return f"Searching YouTube for '{query}'."

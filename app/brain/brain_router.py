@@ -3,10 +3,12 @@ class BrainRouter:
     Routes requests to the correct intent.
     """
 
-    def __init__(self,
-                 memory_intent,
-                 automation_intent,
-                 ai_intent):
+    def __init__(
+        self,
+        memory_intent,
+        automation_intent,
+        ai_intent,
+    ):
 
         self.memory_intent = memory_intent
         self.automation_intent = automation_intent
@@ -29,14 +31,26 @@ class BrainRouter:
 
         parsed = getattr(request, "parsed_command", None)
 
+        print("\n===== ROUTER DEBUG =====")
+        print(parsed)
+        print("========================")
+
         if parsed:
 
-            if parsed.get("action") is not None:
+            action = parsed.get("action")
+
+            print("ACTION =", action)
+
+            if action is not None:
+
+                print(">>> Routing to AutomationIntent")
 
                 return self.automation_intent.handle(request)
 
         # -----------------------
         # AI
         # -----------------------
+
+        print(">>> Routing to AIIntent")
 
         return self.ai_intent.handle(request)

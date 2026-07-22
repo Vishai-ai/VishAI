@@ -103,26 +103,36 @@ class PlanExecutor:
 
         elif task.action == "browser":
 
-            target = task.target.lower()
+            if task.target == "google":
 
-            if target == "youtube":
+                if task.value:
 
-                return self.browser.open_youtube()
-
-            elif target == "google":
+                    return self.browser.search_google(
+                        task.value
+                    )
 
                 return self.browser.open_google()
 
-            elif target == "github":
+            elif task.target == "youtube":
+
+                if task.value:
+
+                    return self.browser.search_youtube(
+                        task.value
+                    )
+
+                return self.browser.open_youtube()
+
+            elif task.target == "github":
 
                 return self.browser.open_github()
 
-            elif target == "gmail":
+            elif task.target == "gmail":
 
                 return self.browser.open_gmail()
 
-            return f"Unknown browser target: {target}"
-
+            return f"Unknown browser target: {task.target}"
+        
         # ------------------------------------------
         # AI Chat
         # ------------------------------------------

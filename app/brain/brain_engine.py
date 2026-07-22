@@ -124,6 +124,11 @@ class BrainEngine(BaseEngine):
     # ==================================================
 
     def process(self, user_input: str):
+        
+        print("\n==============================")
+        print("BrainEngine.process()")
+        print("Input:", user_input)
+        print("==============================")
 
         if not self.initialized:
 
@@ -146,7 +151,7 @@ class BrainEngine(BaseEngine):
         request.parsed_command = self.command_parser.parse(
             user_input
         )
-
+        print("Parsed Command:", request.parsed_command)
         # ------------------------------------
         # Save Conversation
         # ------------------------------------
@@ -167,16 +172,18 @@ class BrainEngine(BaseEngine):
         # Route Request
         # ------------------------------------
 
-        response = self.router.route(
-            request
-        )
+        print("Routing Request...")
+
+        response = self.router.route(request)
+
+        print("Response:", response.message)
 
         # ------------------------------------
         # Save Assistant Response
         # ------------------------------------
 
         self.conversation.add_assistant_message(
-            response.message
+        response.message
         )
 
         return response
