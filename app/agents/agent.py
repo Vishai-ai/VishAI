@@ -1,18 +1,26 @@
-from abc import ABC, abstractmethod
+from app.agent.agent_state import AgentState
+from app.agent.task_queue import TaskQueue
+from app.agent.execution_context import ExecutionContext
 
 
-class Agent(ABC):
+class Agent:
 
-    def __init__(self, name):
+    def __init__(self):
 
-        self.name = name
+        self.state = AgentState.IDLE
 
-    @abstractmethod
-    def can_handle(self, request):
+        self.queue = TaskQueue()
 
-        pass
+        self.context = ExecutionContext()
 
-    @abstractmethod
-    def execute(self, request):
+    def start(self):
 
-        pass
+        self.state = AgentState.PLANNING
+
+    def execute(self):
+
+        self.state = AgentState.EXECUTING
+
+    def finish(self):
+
+        self.state = AgentState.FINISHED
