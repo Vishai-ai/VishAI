@@ -13,14 +13,30 @@ class Agent:
 
         self.context = ExecutionContext()
 
-    def start(self):
+        self.goal = None
+
+    # ---------------------
+
+    def assign_goal(self, goal):
+
+        self.goal = goal
 
         self.state = AgentState.PLANNING
 
-    def execute(self):
+    # ---------------------
+
+    def start_execution(self):
 
         self.state = AgentState.EXECUTING
 
-    def finish(self):
+    # ---------------------
+
+    def complete(self):
 
         self.state = AgentState.FINISHED
+
+    # ---------------------
+
+    def fail(self):
+
+        self.state = AgentState.FAILED

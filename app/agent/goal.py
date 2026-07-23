@@ -4,7 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class Goal:
     """
-    Represents the user's final goal.
+    Represents a user's goal.
     """
 
     text: str
